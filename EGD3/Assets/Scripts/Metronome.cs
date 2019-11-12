@@ -65,21 +65,25 @@ public class Metronome : MonoBehaviour
                 {
                     case 1:
                         beats++;
-                        Debug.Log(beats);
+                        //Debug.Log(beats);
+                        controllerscript.SetNextFrame(beats.ToString());
                         break;
                     case 2:
-                        Debug.Log("e");
+                        //Debug.Log("e");
+                        controllerscript.SetNextFrame("e");
                         break;
                     case 3:
-                        Debug.Log("and");
+                        //Debug.Log("and");
+                        controllerscript.SetNextFrame("and");
                         break;
                     case 4:
-                        Debug.Log("a");
+                        //Debug.Log("a");
+                        controllerscript.SetNextFrame("a");
                         break;
                 }
                 
                 //Debug.Log("Tick: " + accent + "/" + signatureHi);
-                controllerscript.beat();
+                
             }
             phase += amp * 0.3F;
             amp *= 0.993F;
