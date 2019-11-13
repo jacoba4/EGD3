@@ -24,7 +24,7 @@ public class TestController : MonoBehaviour
     {
         if(nextframe)
         {
-            //beat();
+            beat();
         }
     }
 

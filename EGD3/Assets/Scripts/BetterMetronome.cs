@@ -12,6 +12,7 @@ public class BetterMetronome : MonoBehaviour
     public int CurrentMeasure;
     public float inputwindow;
     public GameObject cube;
+    public TestController testcontroller;
 
     private float interval;
     private float nextTime;
@@ -73,7 +74,7 @@ public class BetterMetronome : MonoBehaviour
             asource.Play();
 
 
-
+            testcontroller.SetNextFrame("test");
             // do something with this beat
 
 
