@@ -5159,10 +5159,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Base: 4
   Step: 4
-  BPM: 40
+  BPM: 110
   CurrentStep: 1
   CurrentMeasure: 0
-  inputwindow: 0.8
+  inputwindow: 0.2
   cube: {fileID: 1501537223}
   testcontroller: {fileID: 167786079}
 --- !u!1 &1501537223
