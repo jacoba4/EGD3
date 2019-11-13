@@ -24,7 +24,7 @@ public class TestController : MonoBehaviour
     {
         if(nextframe)
         {
-            beat();
+            //beat();
         }
     }
 
@@ -66,7 +66,7 @@ public class TestController : MonoBehaviour
                 
                 break;
         }
-        Debug.Log(type);
+        //Debug.Log(type);
         nextframetype = type;
         nextframe = true;
     }

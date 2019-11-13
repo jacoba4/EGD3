@@ -9,14 +9,23 @@ public class Metronome : MonoBehaviour
     public float gain = 0.5F;
     public int signatureHi = 4;
     public int signatureLo = 4;
+    public float inputwindow = 400f;
     private double nextTick = 0.0F;
+    private double nextStartTick = 0.0F;
+    private double nextEndTick = 0.0F;
     private float amp = 0.0F;
     private float phase = 0.0F;
     private double sampleRate = 0.0F;
     private int accent;
     private bool running = false;
     private int beats = 0;
-
+    private double starttime = 0;
+    private double endtime = 0;
+    private double windowtime = 0;
+    private bool getstarttime;
+    private bool getendtime;
+    private bool windowopen;
+    public GameObject windowblock;
 
 
     public GameObject controller;
@@ -31,6 +40,9 @@ public class Metronome : MonoBehaviour
         double startTick = AudioSettings.dspTime;
         sampleRate = AudioSettings.outputSampleRate;
         nextTick = startTick * sampleRate;
+        nextStartTick = (startTick - (inputwindow / 2)) * sampleRate;
+        nextEndTick = (startTick + (inputwindow / 2)) * sampleRate;
+        Debug.Log(nextStartTick + "\n" + nextTick + "\n" + nextEndTick);
         running = true;
         bpm = fakebpm*4;
         controllerscript = controller.GetComponent<TestController>();
@@ -58,8 +70,17 @@ public class Metronome : MonoBehaviour
                 data[n * channels + i] += x;
                 i++;
             }
+            //Debug.Log(n);
+            while (sample + n >= nextStartTick)
+            {
+                //Debug.Log("start window: " + AudioSettings.dspTime);
+                nextStartTick += samplesPerTick;
+                getstarttime = true;
+            }
+         
             while (sample + n >= nextTick)
             {
+                getendtime = true;
                 nextTick += samplesPerTick;
                 amp = 1.0f;
                 if(++accent > signatureHi)
@@ -71,7 +92,7 @@ public class Metronome : MonoBehaviour
                 {
                     case 1:
                         beats++;
-                        //Debug.Log(beats);
+                        //Debug.Log(beats.ToString());
                         controllerscript.SetNextFrame(beats.ToString());
                         playerscript1.SetNextFrame(beats.ToString());
                         break;
@@ -91,7 +112,7 @@ public class Metronome : MonoBehaviour
                         playerscript1.SetNextFrame("a");
                         break;
                 }
-                
+                //CloseWindow();
                 //Debug.Log("Tick: " + accent + "/" + signatureHi);
                 
             }
@@ -99,5 +120,43 @@ public class Metronome : MonoBehaviour
             amp *= 0.993F;
             n++;
         }
+    }
+
+
+    private void CloseWindow()
+    {
+        windowtime = endtime - starttime;
+    }
+
+    private void FixedUpdate()
+    {
+        if(getstarttime)
+        {
+            starttime = Time.fixedTime;
+            getstarttime = false;
+            windowblock.SetActive(true);
+            Debug.Log("open window: " + Time.fixedTime);
+        }
+
+        if(getendtime)
+        {
+            Debug.Log("tick: " + Time.fixedTime + "time since last tick: " + (Time.fixedTime-endtime));
+            endtime = Time.fixedTime;
+            windowtime = endtime - starttime;
+            getendtime = false;
+            windowopen = true;
+            
+        }
+        if(windowopen)
+        {
+            double temptime = endtime + windowtime;
+            if (Time.fixedTime >= temptime - 0.01f && Time.fixedTime <= endtime + windowtime + 0.01f)
+            {
+                windowblock.SetActive(false);
+                Debug.Log("close window: " + Time.time);
+                windowopen = false;
+            }
+        }
+        
     }
 }
