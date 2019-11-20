@@ -76,7 +76,7 @@ public class BetterMetronome : MonoBehaviour
             
             if(players)
             {
-                playerscript1.StartFrame();
+                playerscript1.StartFrame(0);
             }
             
 
