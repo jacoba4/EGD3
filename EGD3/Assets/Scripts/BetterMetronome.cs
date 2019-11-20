@@ -13,6 +13,10 @@ public class BetterMetronome : MonoBehaviour
     public float inputwindow;
     public GameObject cube;
     public TestController testcontroller;
+    public GameObject player1;
+    public GameObject player2;
+    private Player playerscript1;
+    private Player playerscript2;
 
     private float interval;
     private float nextTime;
@@ -23,6 +27,8 @@ public class BetterMetronome : MonoBehaviour
     private void Start()
     {
         StartMetronome();
+        playerscript1 = player1.GetComponent<Player>();
+        playerscript2 = player2.GetComponent<Player>();
     }
     public void StartMetronome()
     {
@@ -54,7 +60,7 @@ public class BetterMetronome : MonoBehaviour
         {
             Debug.Log("open: " + Time.time);
             cube.SetActive(true);
-
+            playerscript1.StartFrame();
 
 
             // do something with this beat
@@ -96,7 +102,7 @@ public class BetterMetronome : MonoBehaviour
         {
             Debug.Log("close: " + Time.time);
             cube.SetActive(false);
-
+            playerscript1.EndFrame();
 
 
             // do something with this beat

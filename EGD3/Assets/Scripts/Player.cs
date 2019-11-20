@@ -6,16 +6,16 @@ public class Player : MonoBehaviour
 {
     string nextframetype;
     // Start is called before the first frame update
-    public bool nextframe;
+    public bool frame_open;
     void Start()
     {
-        nextframe = false;
+        frame_open = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (nextframe)
+        if (frame_open)
         {
             if (Input.GetKeyDown("space"))
             {
@@ -29,12 +29,15 @@ public class Player : MonoBehaviour
         //Vector3 spawnpos = new Vector3(pos,0,0);
         //Instantiate(spawn,spawnpos, Quaternion.identity);
         //pos
-        nextframe = false;
+        frame_open = false;
     }
 
-    public void SetNextFrame(string type)
+    public void StartFrame()
     {
-        nextframetype = type;
-        nextframe = true;
+        frame_open = true;
+    }
+    public void EndFrame()
+    {
+        frame_open = false;
     }
 }

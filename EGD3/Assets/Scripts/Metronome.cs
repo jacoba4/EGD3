@@ -94,22 +94,22 @@ public class Metronome : MonoBehaviour
                         beats++;
                         //Debug.Log(beats.ToString());
                         controllerscript.SetNextFrame(beats.ToString());
-                        playerscript1.SetNextFrame(beats.ToString());
+                        
                         break;
                     case 2:
                         //Debug.Log("e");
                         controllerscript.SetNextFrame("e");
-                        playerscript1.SetNextFrame("e");
+                        
                         break;
                     case 3:
                         //Debug.Log("and");
                         controllerscript.SetNextFrame("and");
-                        playerscript1.SetNextFrame("and");
+                        
                         break;
                     case 4:
                         //Debug.Log("a");
                         controllerscript.SetNextFrame("a");
-                        playerscript1.SetNextFrame("a");
+                        
                         break;
                 }
                 //CloseWindow();
