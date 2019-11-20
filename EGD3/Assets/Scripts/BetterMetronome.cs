@@ -51,7 +51,10 @@ public class BetterMetronome : MonoBehaviour
         nextCloseTime = Time.time + 2 +(inputwindow / 2) + (inputwindow / 2);
         StartCoroutine("StartTicks");
     }
+    public void Recieve_Arr(string[] arr)
+    {
 
+    }
     IEnumerator StartTicks()
     {
         yield return new WaitForSeconds(3);

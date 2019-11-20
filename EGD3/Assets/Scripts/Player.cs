@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    string nextframetype;
+    public GameObject combat_manager;
+    int frametype;
     // Start is called before the first frame update
     public bool frame_open;
+    string[] combo = new string[4];
     void Start()
     {
         frame_open = false;
@@ -15,13 +17,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (frame_open)
+        if (frame_open && Input.GetKeyDown("space"))
         {
-            if (Input.GetKeyDown("space"))
-            {
-                print("timing works");
-            }
-            Beat();
+            print("timing works");
+            combo[frametype] = "f";
+            frame_open = false;
         }
     }
     public void Beat()
@@ -32,12 +32,23 @@ public class Player : MonoBehaviour
         frame_open = false;
     }
 
-    public void StartFrame()
+    public void StartFrame(int beat)
     {
+        frametype = beat;
         frame_open = true;
+        combo[beat] = null;
     }
     public void EndFrame()
     {
+        if (frametype == 3)
+        {
+            if (tag.Equals("taco"))
+            {
+                Taco_Surpise script = this.GetComponent<Taco_Surpise>();
+                script.GetArr(combo);
+            }
+        }
         frame_open = false;
+        
     }
 }
