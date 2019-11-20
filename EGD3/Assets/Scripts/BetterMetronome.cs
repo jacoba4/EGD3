@@ -12,6 +12,8 @@ public class BetterMetronome : MonoBehaviour
     public int CurrentMeasure;
     public float inputwindow = 0.2f;
     public bool visuals = false;
+    public bool players = false;
+    public bool inputdelay = false;
     public GameObject cube;
     public TestController testcontroller;
     public GameObject player1;
@@ -28,8 +30,12 @@ public class BetterMetronome : MonoBehaviour
     private void Start()
     {
         StartMetronome();
-        playerscript1 = player1.GetComponent<Player>();
-        playerscript2 = player2.GetComponent<Player>();
+        if(players)
+        {
+            playerscript1 = player1.GetComponent<Player>();
+            playerscript2 = player2.GetComponent<Player>();
+        }
+        
     }
     public void StartMetronome()
     {
@@ -48,7 +54,7 @@ public class BetterMetronome : MonoBehaviour
 
     IEnumerator StartTicks()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
         StartCoroutine("PreTick");
         yield return new WaitForSeconds(inputwindow / 2);
         StartCoroutine("DoTick");
@@ -65,7 +71,11 @@ public class BetterMetronome : MonoBehaviour
                 cube.SetActive(true);
             }
             
-            playerscript1.StartFrame();
+            if(players)
+            {
+                playerscript1.StartFrame();
+            }
+            
 
 
             // do something with this beat
@@ -88,9 +98,31 @@ public class BetterMetronome : MonoBehaviour
             //testcontroller.SetNextFrame("test");
             // do something with this beat
 
-
+            if (players)
+            {
+                if (CurrentStep == 1)
+                {
+                    SendMessage(CurrentMeasure.ToString());
+                }
+                else if (CurrentStep == 2)
+                {
+                    SendMessage("e");
+                }
+                else if (CurrentStep == 3)
+                {
+                    SendMessage("and");
+                }
+                else if (CurrentStep == 4)
+                {
+                    SendMessage("a");
+                }
+            }
 
             nextTime += interval; // add interval to our relative time
+            if(inputdelay)
+            {
+                SendMessage("GetTime",Time.time);
+            }
             yield return new WaitForSeconds(nextTime - Time.time); // wait for the difference delta between now and expected next time of hit
             CurrentStep++;
             if (CurrentStep > Step)
@@ -105,7 +137,11 @@ public class BetterMetronome : MonoBehaviour
     {
         for (; ; )
         {
-            playerscript1.EndFrame();
+            if(players)
+            {
+                playerscript1.EndFrame();
+            }
+            
             //Debug.Log("close: " + Time.time);
             if (visuals)
             {
