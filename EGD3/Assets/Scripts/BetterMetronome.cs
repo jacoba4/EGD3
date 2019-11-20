@@ -10,7 +10,8 @@ public class BetterMetronome : MonoBehaviour
     public float BPM;
     public int CurrentStep = 1;
     public int CurrentMeasure;
-    public float inputwindow;
+    public float inputwindow = 0.2f;
+    public bool visuals = false;
     public GameObject cube;
     public TestController testcontroller;
     public GameObject player1;
@@ -58,8 +59,12 @@ public class BetterMetronome : MonoBehaviour
     {
         for(; ; )
         {
-            Debug.Log("open: " + Time.time);
-            cube.SetActive(true);
+            //Debug.Log("open: " + Time.time);
+            if(visuals)
+            {
+                cube.SetActive(true);
+            }
+            
             playerscript1.StartFrame();
 
 
@@ -75,12 +80,12 @@ public class BetterMetronome : MonoBehaviour
     {
         for (; ; )
         {
-            Debug.Log("bop: " + Time.time);
+            //Debug.Log("bop: " + Time.time);
             AudioSource asource = GetComponent<AudioSource>();
             asource.Play();
 
 
-            testcontroller.SetNextFrame("test");
+            //testcontroller.SetNextFrame("test");
             // do something with this beat
 
 
@@ -100,9 +105,12 @@ public class BetterMetronome : MonoBehaviour
     {
         for (; ; )
         {
-            Debug.Log("close: " + Time.time);
-            cube.SetActive(false);
             playerscript1.EndFrame();
+            //Debug.Log("close: " + Time.time);
+            if (visuals)
+            {
+                cube.SetActive(false);
+            }
 
 
             // do something with this beat
