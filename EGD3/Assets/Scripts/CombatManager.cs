@@ -127,4 +127,5 @@ public class CombatManager : MonoBehaviour
         p1 = new P1();
         p2 = new P2();
     }
+
 }

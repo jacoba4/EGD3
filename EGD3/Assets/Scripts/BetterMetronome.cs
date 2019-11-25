@@ -76,7 +76,8 @@ public class BetterMetronome : MonoBehaviour
             
             if(players)
             {
-                playerscript1.StartFrame(0);
+                playerscript1.StartFrame(CurrentStep-1);
+                playerscript1.StartFrame(CurrentStep-1);
             }
             
 
@@ -105,19 +106,19 @@ public class BetterMetronome : MonoBehaviour
             {
                 if (CurrentStep == 1)
                 {
-                    SendMessage(CurrentMeasure.ToString());
+                    print(CurrentMeasure.ToString());
                 }
                 else if (CurrentStep == 2)
                 {
-                    SendMessage("e");
+                    print("e");
                 }
                 else if (CurrentStep == 3)
                 {
-                    SendMessage("and");
+                    print("and");
                 }
                 else if (CurrentStep == 4)
                 {
-                    SendMessage("a");
+                    print("a");
                 }
             }
 
@@ -143,6 +144,7 @@ public class BetterMetronome : MonoBehaviour
             if(players)
             {
                 playerscript1.EndFrame();
+                playerscript2.EndFrame();
             }
             
             //Debug.Log("close: " + Time.time);
