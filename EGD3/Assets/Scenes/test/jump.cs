@@ -8,7 +8,7 @@ public class jump : MonoBehaviour
 {
     // Start is called before the first frame update
     private float jumpamount = 70;
-    SerialPort sp = new SerialPort("COM7", 9600);
+    SerialPort sp = new SerialPort("COM8", 9600);
     public Rigidbody rb;
 
     void Start()
