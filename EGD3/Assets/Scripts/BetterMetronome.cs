@@ -46,9 +46,9 @@ public class BetterMetronome : MonoBehaviour
         var multiplier = Base / 4f;
         var tmpInterval = 60f / BPM;
         interval = tmpInterval / multiplier;
-        nextOpenTime = Time.time + 2;
-        nextTime = Time.time + 2 + (inputwindow / 2); // set the relative time to now
-        nextCloseTime = Time.time + 2 +(inputwindow / 2) + (inputwindow / 2);
+        nextOpenTime = Time.time + 3;
+        nextTime = Time.time + 3 + (inputwindow / 2); // set the relative time to now
+        nextCloseTime = Time.time + 3 +(inputwindow / 2) + (inputwindow / 2);
         StartCoroutine("StartTicks");
     }
     public void Recieve_Arr(string[] arr)
@@ -76,16 +76,20 @@ public class BetterMetronome : MonoBehaviour
             
             if(players)
             {
-                playerscript1.StartFrame(CurrentStep-1);
-                playerscript1.StartFrame(CurrentStep-1);
+                //Debug.Log("SHOULD BE: " + (CurrentStep-1));
+                if(CurrentStep == 1 && CurrentMeasure == 1)
+                {
+                    playerscript1.StartFrame(CurrentStep);
+                    playerscript2.StartFrame(CurrentStep);
+                }
+                else
+                {
+                    playerscript1.StartFrame(CurrentStep-1);
+                    playerscript2.StartFrame(CurrentStep-1);
+                }
+                
             }
             
-
-
-            // do something with this beat
-
-
-
             nextOpenTime += interval; // add interval to our relative time
             yield return new WaitForSeconds(nextOpenTime - Time.time); // wait for the difference delta between now and expected next time of hit
         }
@@ -141,24 +145,20 @@ public class BetterMetronome : MonoBehaviour
     {
         for (; ; )
         {
-            if(players)
-            {
-                playerscript1.EndFrame();
-                playerscript2.EndFrame();
-            }
-            
             //Debug.Log("close: " + Time.time);
             if (visuals)
             {
                 cube.SetActive(false);
             }
 
-
-            // do something with this beat
-
-
-
+            if(players)
+            {
+                playerscript1.EndFrame();
+                playerscript2.EndFrame();
+            }
+            
             nextCloseTime += interval; // add interval to our relative time
+            //Debug.Log(nextCloseTime);
             yield return new WaitForSeconds(nextCloseTime - Time.time); // wait for the difference delta between now and expected next time of hit
         }
     }

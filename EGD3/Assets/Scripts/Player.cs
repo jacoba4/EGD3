@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     int player_number;
     // Start is called before the first frame update
     public bool frame_open;
-    Move[] combo = new Move[4];
+    Move[] combo;
     int current_beat = 0;
     Move[] lightmove;
     SerialPort sp = new SerialPort("COM5", 9600);
@@ -23,10 +23,29 @@ public class Player : MonoBehaviour
         {
             sp = new SerialPort("COM6", 9600);
         }
-        lightmove = new Move[4];
+
+
+        combo = new Move[4];
+        for(int i = 0; i < 4; i++)
+        {
+            combo[i] = new Move(-1);
+        }
+
+
         frame_open = false;
-        //combat_manager = GameObject.FindGameObjectWithTag("CombatManager");
-        //combat_manager_script = combat_manager.GetComponent<CombatManager>();
+        combat_manager = GameObject.FindGameObjectWithTag("CombatManager");
+        combat_manager_script = combat_manager.GetComponent<CombatManager>();
+
+        if(gameObject.tag == "p1")
+        {
+            player_number = 1;
+        }
+
+        if(gameObject.tag == "p2")
+        {
+            player_number = 2;
+        }
+
         sp.Open();
         sp.ReadTimeout = 40;
     }
@@ -34,52 +53,96 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (frame_open && sp.IsOpen)
+        if (frame_open)
         {
-            int signal=sp.ReadByte();
-
-            if (signal==1)
+            if(sp.IsOpen)
             {
-                print(signal);
+                int signal=sp.ReadByte();
+
+                if (signal==1)
+                {
+                    print(signal);
+                    combo[current_beat] = new Move(1);
+                    frame_open = false;
+                }
+                if (signal == 2)
+                {
+                    print(signal);
+                    combo[current_beat] = new Move(2);
+                    frame_open = false;
+                }
+                if (signal == 3)
+                {
+                    print(signal);
+                    combo[current_beat] = new Move(3);
+                    frame_open = false;
+                }
+                if (signal == 4)
+                {
+                    print(signal);
+                    combo[current_beat] = new Move(4);
+                    frame_open = false;
+                }
+                if (signal == 5)
+                {
+                    print(signal);
+                    combo[current_beat] = new Move(5);
+                    frame_open = false;
+                }
+                if (signal == 6)
+                {
+                    print(signal);
+                    combo[current_beat] = new Move(6);
+                    frame_open = false;
+                }
+                if (signal == 7)
+                {
+                    print(signal);
+                    combo[current_beat] = new Move(7);
+                    frame_open = false;
+                }
+                return;
+            }
+
+            //If using keyboard
+            if(Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                print("1 pressed");
                 combo[current_beat] = new Move(1);
                 frame_open = false;
             }
-            if (signal == 2)
+            if(Input.GetKeyDown(KeyCode.Alpha2))
             {
-                print(signal);
                 combo[current_beat] = new Move(2);
                 frame_open = false;
             }
-            if (signal == 3)
+            if(Input.GetKeyDown(KeyCode.Alpha3))
             {
-                print(signal);
                 combo[current_beat] = new Move(3);
                 frame_open = false;
             }
-            if (signal == 4)
+            if(Input.GetKeyDown(KeyCode.Alpha4))
             {
-                print(signal);
                 combo[current_beat] = new Move(4);
                 frame_open = false;
             }
-            if (signal == 5)
+            if(Input.GetKeyDown(KeyCode.Alpha5))
             {
-                print(signal);
                 combo[current_beat] = new Move(5);
                 frame_open = false;
             }
-            if (signal == 6)
+            if(Input.GetKeyDown(KeyCode.Alpha6))
             {
-                print(signal);
                 combo[current_beat] = new Move(6);
                 frame_open = false;
             }
-            if (signal == 7)
+            if(Input.GetKeyDown(KeyCode.Alpha7))
             {
-                print(signal);
                 combo[current_beat] = new Move(7);
                 frame_open = false;
             }
+            
+            
             //combo[frametype] = "f";
         }
     }
@@ -101,10 +164,12 @@ public class Player : MonoBehaviour
     public void EndFrame()
     {
         frame_open = false;
+        Debug.Log("CURRENT BEAT: " +current_beat);
         if(current_beat == 1)
         {
             ParseCombo();
             ClearCombo();
+            combat_manager_script.contest = true;
         }
     }
 
@@ -112,7 +177,19 @@ public class Player : MonoBehaviour
     {
         string HML = "";
         string PJB = "";
-    
+        bool nul = false;
+        for(int i = 0; i < 4; i++)
+        {
+            if(combo[i] == null)
+            {
+                nul = true;
+            }
+        }
+        if(nul)
+        {
+            return;
+        }
+
         if(combo[0].IsRest() && !combo[1].IsRest() && combo[2].IsRest() && !combo[3].IsRest())
         {
             if(combo[1].IsChord() && combo[3].IsChord())
@@ -178,5 +255,22 @@ public class Player : MonoBehaviour
     void ClearCombo()
     {
         combo = new Move[4];
+    }
+
+    public void Damage(int dmg)
+    {
+        hp-=dmg;
+
+        if(hp<=0)
+        {
+            if(gameObject.tag == "p1")
+            {
+                combat_manager_script.P1Lose();
+            }
+            else if(gameObject.tag == "p2")
+            {
+                combat_manager_script.P2Lose();
+            }
+        }
     }
 }
