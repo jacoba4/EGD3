@@ -129,10 +129,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 163416655}
+  - component: {fileID: 163416656}
   - component: {fileID: 163416654}
   m_Layer: 0
   m_Name: GameObject
-  m_TagString: Untagged
+  m_TagString: taco
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -146,10 +147,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 163416653}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6937f5bc441d2d144a57738192cb1202, type: 3}
+  m_Script: {fileID: 11500000, guid: 00bfbdcdabd283048943d0c5476fc01e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextframe: 0
 --- !u!4 &163416655
 Transform:
   m_ObjectHideFlags: 0
@@ -164,6 +164,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &163416656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163416653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6937f5bc441d2d144a57738192cb1202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combat_manager: {fileID: 0}
+  frame_open: 0
 --- !u!1 &167786075
 GameObject:
   m_ObjectHideFlags: 0
@@ -5163,8 +5177,11 @@ MonoBehaviour:
   CurrentStep: 1
   CurrentMeasure: 0
   inputwindow: 0.2
+  visuals: 0
   cube: {fileID: 1501537223}
   testcontroller: {fileID: 167786079}
+  player1: {fileID: 163416653}
+  player2: {fileID: 1801658614}
 --- !u!1 &1501537223
 GameObject:
   m_ObjectHideFlags: 0
@@ -5286,7 +5303,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6937f5bc441d2d144a57738192cb1202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextframe: 0
+  combat_manager: {fileID: 0}
+  frame_open: 0
 --- !u!4 &1801658616
 Transform:
   m_ObjectHideFlags: 0
