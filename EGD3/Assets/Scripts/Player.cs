@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO.Ports;
 
 public class Player : MonoBehaviour
 {
@@ -14,56 +15,72 @@ public class Player : MonoBehaviour
     Move[] combo = new Move[4];
     int current_beat = 0;
     Move[] lightmove;
+    SerialPort sp = new SerialPort("COM5", 9600);
+
     void Start()
     {
+        if (gameObject.name.Equals("GameObject (1)"))
+        {
+            sp = new SerialPort("COM6", 9600);
+        }
         lightmove = new Move[4];
         frame_open = false;
-        combat_manager = GameObject.FindGameObjectWithTag("CombatManager");
-        combat_manager_script = combat_manager.GetComponent<CombatManager>();
+        //combat_manager = GameObject.FindGameObjectWithTag("CombatManager");
+        //combat_manager_script = combat_manager.GetComponent<CombatManager>();
+        sp.Open();
+        sp.ReadTimeout = 40;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (frame_open)
+        if (frame_open && sp.IsOpen)
         {
-            if(Input.GetKeyDown(KeyCode.Alpha1))
+            int signal=sp.ReadByte();
+
+            if (signal==1)
             {
+                print(signal);
                 combo[current_beat] = new Move(1);
                 frame_open = false;
             }
-            if(Input.GetKeyDown(KeyCode.Alpha2))
+            if (signal == 2)
             {
+                print(signal);
                 combo[current_beat] = new Move(2);
                 frame_open = false;
             }
-            if(Input.GetKeyDown(KeyCode.Alpha3))
+            if (signal == 3)
             {
+                print(signal);
                 combo[current_beat] = new Move(3);
                 frame_open = false;
             }
-            if(Input.GetKeyDown(KeyCode.Alpha4))
+            if (signal == 4)
             {
+                print(signal);
                 combo[current_beat] = new Move(4);
                 frame_open = false;
             }
-            if(Input.GetKeyDown(KeyCode.Alpha5))
+            if (signal == 5)
             {
+                print(signal);
                 combo[current_beat] = new Move(5);
                 frame_open = false;
             }
-            if(Input.GetKeyDown(KeyCode.Alpha6))
+            if (signal == 6)
             {
+                print(signal);
                 combo[current_beat] = new Move(6);
                 frame_open = false;
             }
-            if(Input.GetKeyDown(KeyCode.Alpha7))
+            if (signal == 7)
             {
+                print(signal);
                 combo[current_beat] = new Move(7);
                 frame_open = false;
             }
             //combo[frametype] = "f";
-            
         }
     }
     public void Beat()
