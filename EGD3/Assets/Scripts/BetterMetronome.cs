@@ -84,8 +84,8 @@ public class BetterMetronome : MonoBehaviour
                 }
                 else
                 {
-                    playerscript1.StartFrame(CurrentStep-1);
-                    playerscript2.StartFrame(CurrentStep-1);
+                    playerscript1.StartFrame(CurrentStep);
+                    playerscript2.StartFrame(CurrentStep);
                 }
                 
             }

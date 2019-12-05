@@ -104,43 +104,90 @@ public class Player : MonoBehaviour
                 return;
             }
 
+
+            int notes_played = 0;
+            int move = -1;
             //If using keyboard
             if(Input.GetKeyDown(KeyCode.Alpha1))
             {
-                print("1 pressed");
-                combo[current_beat] = new Move(1);
+                //print("1 pressed");
+                move = 1;
                 frame_open = false;
+                notes_played++;
             }
             if(Input.GetKeyDown(KeyCode.Alpha2))
             {
-                combo[current_beat] = new Move(2);
+                move = 2;
                 frame_open = false;
+                notes_played++;
             }
             if(Input.GetKeyDown(KeyCode.Alpha3))
             {
-                combo[current_beat] = new Move(3);
+                move = 3;
                 frame_open = false;
+                notes_played++;
             }
             if(Input.GetKeyDown(KeyCode.Alpha4))
             {
-                combo[current_beat] = new Move(4);
+                move = 4;
                 frame_open = false;
+                notes_played++;
             }
             if(Input.GetKeyDown(KeyCode.Alpha5))
             {
-                combo[current_beat] = new Move(5);
+                move = 5;
                 frame_open = false;
+                notes_played++;
             }
             if(Input.GetKeyDown(KeyCode.Alpha6))
             {
-                combo[current_beat] = new Move(6);
+                move = 6;
                 frame_open = false;
+                notes_played++;
             }
             if(Input.GetKeyDown(KeyCode.Alpha7))
             {
-                combo[current_beat] = new Move(7);
+                move = 7;
                 frame_open = false;
+                notes_played++;
             }
+
+            int pos = 0;
+                    if(current_beat == 1)
+                    {
+                        pos = 3;
+                    }
+                    if(current_beat == 2)
+                    {
+                        pos = 0;
+                    }
+                    if(current_beat == 3)
+                    {
+                        pos = 1;
+                    }
+                    if(current_beat == 4)
+                    {
+                        pos = 2;
+                    }
+
+            if(notes_played > 0)
+            {
+                
+                if(notes_played >1)
+                {
+                    combo[pos] = new Move(8);
+                }
+                else
+                {   
+                    combo[pos] = new Move(move);
+                }
+            }
+            else
+            {
+                combo[pos]= new Move(-1);
+            }
+
+
             
             
             //combo[frametype] = "f";
@@ -157,14 +204,18 @@ public class Player : MonoBehaviour
     public void StartFrame(int beat)
     {
         frametype = beat;
+        current_beat++;
+        if(current_beat == 5)
+        {
+            current_beat = 1;
+        }
         frame_open = true;
-        current_beat = beat;
-        combo[beat] = null;
+
     }
     public void EndFrame()
     {
         frame_open = false;
-        Debug.Log("CURRENT BEAT: " +current_beat);
+        //Debug.Log("CURRENT BEAT: " +current_beat);
         if(current_beat == 1)
         {
             ParseCombo();
