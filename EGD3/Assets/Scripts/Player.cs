@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public GameObject combat_manager;
     CombatManager combat_manager_script;
     int frametype;
-    int hp = 100;
+    public int hp = 100;
     int player_number;
     // Start is called before the first frame update
     public bool frame_open;
@@ -322,6 +322,8 @@ public class Player : MonoBehaviour
             {
                 combat_manager_script.P2Lose();
             }
+
+            GameObject.FindGameObjectWithTag("metronome").GetComponent<BetterMetronome>().StopMetronome();
         }
     }
 }

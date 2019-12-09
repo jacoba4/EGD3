@@ -8,6 +8,9 @@ TagManager:
   - CombatManager
   - p1
   - p2
+  - metronome
+  - light
+  - beater
   layers:
   - Default
   - TransparentFX

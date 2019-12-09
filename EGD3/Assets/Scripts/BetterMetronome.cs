@@ -18,6 +18,8 @@ public class BetterMetronome : MonoBehaviour
     public TestController testcontroller;
     public GameObject player1;
     public GameObject player2;
+    ParticleSystem beater;
+    GameObject light;
     private Player playerscript1;
     private Player playerscript2;
 
@@ -29,6 +31,8 @@ public class BetterMetronome : MonoBehaviour
 
     private void Start()
     {
+        light = GameObject.FindGameObjectWithTag("light");
+        beater = GameObject.FindGameObjectWithTag("beater").GetComponent<ParticleSystem>();
         StartMetronome();
         if(players)
         {
@@ -102,6 +106,8 @@ public class BetterMetronome : MonoBehaviour
             AudioSource asource = GetComponent<AudioSource>();
             asource.Play();
 
+            light.SendMessage("Flash");
+            beater.Play();
 
             //testcontroller.SetNextFrame("test");
             // do something with this beat
@@ -161,5 +167,12 @@ public class BetterMetronome : MonoBehaviour
             //Debug.Log(nextCloseTime);
             yield return new WaitForSeconds(nextCloseTime - Time.time); // wait for the difference delta between now and expected next time of hit
         }
+    }
+
+    public void StopMetronome()
+    {
+        StopAllCoroutines();
+        CurrentStep = 1;
+        CurrentMeasure = 0;
     }
 }
