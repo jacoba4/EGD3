@@ -65,6 +65,7 @@ public class BetterMetronome : MonoBehaviour
         StartCoroutine("PreTick");
         yield return new WaitForSeconds(inputwindow / 2);
         StartCoroutine("DoTick");
+        GameObject.FindGameObjectWithTag("CombatManager").SendMessage("StartSong");
         yield return new WaitForSeconds(inputwindow / 2);
         StartCoroutine("PostTick");
     }

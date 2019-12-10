@@ -338,4 +338,9 @@ public class CombatManager : MonoBehaviour
         p1win.SetActive(false);
     }
 
+    private void StartSong()
+    {
+        GetComponent<AudioSource>().Play();
+    }
+
 }
