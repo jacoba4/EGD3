@@ -23,9 +23,10 @@ public class CombatManager : MonoBehaviour
     public int chip_damage = 5;
     P1 p1;
     P2 p2;
-    public Text p1win;
-    public Text p2win;
+    public GameObject p1win;
+    public GameObject p2win;
     public bool contest;
+    public GameObject noteattack;
     private void Start()
     {
         p1 = new P1();
@@ -68,6 +69,7 @@ public class CombatManager : MonoBehaviour
 
         print("Player 1: " + p1.HML + ", " + p1.PJB);
         print("Player 2: " + p2.HML + ", " + p2.PJB);
+        /*
         switch (p1.PJB)
         {
             case "power":
@@ -79,11 +81,13 @@ public class CombatManager : MonoBehaviour
                         {
                             case 0:
                                 //p1 loses
-                                p1s.Damage(power_damage);
+                                CreateAttack("p2",power_damage);
+                                //p1s.Damage(power_damage);
                                 break;
                             case 1:
                                 //p1 wins
-                                p2s.Damage(power_damage);
+                                CreateAttack("p1",power_damage);
+                                //p2s.Damage(power_damage);
                                 break;
                             case 2:
                                 //tie
@@ -92,15 +96,18 @@ public class CombatManager : MonoBehaviour
                         break;
                     case "jab":
                         //p2 wins
-                        p1s.Damage(jab_damage);
+                        CreateAttack("p2",jab_damage);
+                        //p1s.Damage(jab_damage);
                         break;
                     case "block":
                         //p1 wins
-                        p2s.Damage(power_damage);
+                        CreateAttack("p1",power_damage);
+                        //p2s.Damage(power_damage);
                         break;
-                    case "":
+                    default:
                         //p1 wins
-                        p2s.Damage(power_damage);
+                        CreateAttack("p1",power_damage);
+                        //p2s.Damage(power_damage);
                         break;
                 }
                 break;
@@ -110,7 +117,8 @@ public class CombatManager : MonoBehaviour
                 {
                     case "power":
                         //p1 wins
-                        p2s.Damage(jab_damage);
+                        CreateAttack("p1",jab_damage);
+                        //p2s.Damage(jab_damage);
                         break;
                     case "jab":
                         //check hml
@@ -119,11 +127,13 @@ public class CombatManager : MonoBehaviour
                         {
                             case 0:
                                 //p1 loses
-                                p1s.Damage(jab_damage);
+                                CreateAttack("p2",jab_damage);
+                                //p1s.Damage(jab_damage);
                                 break;
                             case 1:
                                 //p1 wins
-                                p2s.Damage(jab_damage);
+                                CreateAttack("p1",jab_damage);
+                                //p2s.Damage(jab_damage);
                                 break;
                             case 2:
                                 //tie
@@ -132,11 +142,13 @@ public class CombatManager : MonoBehaviour
                         break;
                     case "block":
                         //p2 chip dmg? or nothing
-                        p2s.Damage(chip_damage);
+                        CreateAttack("p1",chip_damage);
+                        //p2s.Damage(chip_damage);
                         break;
-                    case "":
+                    default:
                         //p1 wins
-                        p2s.Damage(jab_damage);
+                        CreateAttack("p1",jab_damage);
+                        //p2s.Damage(jab_damage);
                         break;
                 }
                 break;
@@ -145,42 +157,81 @@ public class CombatManager : MonoBehaviour
                 {
                     case "power":
                         //p1 loses
-                        p1s.Damage(power_damage);
+                        CreateAttack("p2",power_damage);
+                        //p1s.Damage(power_damage);
                         break;
                     case "jab":
                         //p1 chip dmg? or nothing
-                        p1s.Damage(chip_damage);
+                        CreateAttack("p2",chip_damage);
+                        //p1s.Damage(chip_damage);
                         break;
                     case "block":
                         //nothing
                         break;
-                    case "":
+                    default:
                         //nothing
                         break;
                 }
                 break;
 
-            case "":
+            default:
                 switch(p2.PJB)
                 {
                     case "power":
                         //p1 loses
-                        p1s.Damage(power_damage);
+                        CreateAttack("p2",power_damage);
+                        //p1s.Damage(power_damage);
                         break;
                     case "jab":
                         //p1 loses
-                        p1s.Damage(jab_damage);
+                        CreateAttack("p2",jab_damage);
+                        //p1s.Damage(jab_damage);
                         break;
                     case "block":
                         //nothing happens
                         break;
-                    case "":
+                    default:
                         //nothing happens
                         break;
                 }
                 break;
+        }*/
+        
+        GameObject p1att = null;
+        GameObject p2att = null;
+        if(p1.PJB == "power")
+        {
+            p1att = CreateAttack("p1",power_damage);
+        }
+        if(p1.PJB == "jab")
+        {
+            p1att = CreateAttack("p1",jab_damage);
+        }
+        if(p1.PJB == "block")
+        {
+            //CREATE BLOCK
+        }
+        if(p2.PJB == "power")
+        {
+            p2att = CreateAttack("p2",power_damage);
+        }
+        if(p2.PJB == "jab")
+        {
+            p2att = CreateAttack("p2",jab_damage);
+        }
+        if(p2.PJB == "block")
+        {
+            //CREATE BLOCK
         }
 
+        if(p1att != null)
+        {
+            p1att.GetComponent<NoteAttack>().otheratt = p2att;
+        }
+        if(p2att != null)
+        {
+            p2att.GetComponent<NoteAttack>().otheratt = p1att;
+        }
         Reset();
     }
 
@@ -253,14 +304,38 @@ public class CombatManager : MonoBehaviour
         p2 = new P2();
     }
 
+    private GameObject CreateAttack(string astartplayer, int adamage)
+    {
+        Vector3 startpos = Vector3.zero;
+        string target = "";
+        string aspeed = "";
+        if(astartplayer == "p1")
+        {
+            startpos = GameObject.FindGameObjectWithTag("p1").transform.position;
+            target = p1.HML;
+            aspeed = p1.PJB;
+        }
+        if(astartplayer == "p2")
+        {
+            startpos = GameObject.FindGameObjectWithTag("p2").transform.position;
+            target = p2.HML;
+            aspeed = p2.PJB;
+        }
+
+        startpos.y-= 3f;
+        GameObject temp = Instantiate(noteattack,startpos,Quaternion.identity);
+        temp.GetComponent<NoteAttack>().SetPath(astartplayer,adamage,target,aspeed);
+        return temp;
+    }
+
     public void P1Lose()
     {
-        p2win.enabled = true;
+        p2win.SetActive(true);
     }
 
     public void P2Lose()
     {
-        p1win.enabled = true;
+        p1win.SetActive(false);
     }
 
 }

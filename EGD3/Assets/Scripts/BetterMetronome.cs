@@ -106,7 +106,7 @@ public class BetterMetronome : MonoBehaviour
             AudioSource asource = GetComponent<AudioSource>();
             asource.Play();
 
-            light.SendMessage("Flash");
+            
             beater.Play();
 
             //testcontroller.SetNextFrame("test");
@@ -141,6 +141,7 @@ public class BetterMetronome : MonoBehaviour
             CurrentStep++;
             if (CurrentStep > Step)
             {
+                light.SendMessage("Flash");
                 CurrentStep = 1;
                 CurrentMeasure++;
             }
