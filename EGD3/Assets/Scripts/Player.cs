@@ -14,22 +14,20 @@ public class Player : MonoBehaviour
     public bool frame_open;
     Move[] combo;
     int current_beat = 0;
-    AudioSource audiosource;
     AudioSource[] asources;
-    public AudioClip anote;
-    public AudioClip bnote;
-    public AudioClip cnote;
-    public AudioClip dnote;
-    public AudioClip enote;
-    public AudioClip fnote;
-    public AudioClip gnote;
-    bool stop = false;
+    bool[] stopsources;
+    public float volume;
     SerialPort sp = new SerialPort("COM5", 9600);
 
     void Start()
     {
         //audiosource = GetComponent<AudioSource>();
         asources = GetComponents<AudioSource>();
+        for(int i = 0; i < asources.Length; i++)
+        {
+            asources[i].volume = volume;
+        }
+        stopsources = new bool[7];
         if (gameObject.name.Equals("GameObject (1)"))
         {
             sp = new SerialPort("COM6", 9600);
@@ -121,19 +119,21 @@ public class Player : MonoBehaviour
             //If using keyboard
             if(Input.GetKeyDown(KeyCode.Alpha1))
             {
-                //print("1 pressed");
                 move = 1;
                 frame_open = false;
                 notes_played++;
-                //audiosource.clip = cnote;
+
+                stopsources[0] = false;
                 asources[0].Play();
-                //print("shouldplay");
+                print("play");
             }
             if(Input.GetKeyDown(KeyCode.Alpha2))
             {
                 move = 2;
                 frame_open = false;
                 notes_played++;
+
+                stopsources[1] = false;
                 asources[1].Play();
             }
             if(Input.GetKeyDown(KeyCode.Alpha3))
@@ -141,16 +141,18 @@ public class Player : MonoBehaviour
                 move = 3;
                 frame_open = false;
                 notes_played++;
-                //audiosource.clip = enote;
-                //audiosource.Play();
+                
+                stopsources[2] = false;
+                asources[2].Play();
             }
             if(Input.GetKeyDown(KeyCode.Alpha4))
             {
                 move = 4;
                 frame_open = false;
                 notes_played++;
-                //audiosource.clip = fnote;
-                //audiosource.Play();
+                
+                stopsources[3] = false;
+                asources[3].Play();
             }
             if(Input.GetKeyDown(KeyCode.Alpha5))
             {
@@ -158,6 +160,8 @@ public class Player : MonoBehaviour
                 frame_open = false;
                 notes_played++;
                 
+                stopsources[4] = false;
+                asources[4].Play();
             }
             if(Input.GetKeyDown(KeyCode.Alpha6))
             {
@@ -165,6 +169,8 @@ public class Player : MonoBehaviour
                 frame_open = false;
                 notes_played++;
                 
+                stopsources[5] = false;
+                asources[5].Play();
             }
             if(Input.GetKeyDown(KeyCode.Alpha7))
             {
@@ -172,17 +178,45 @@ public class Player : MonoBehaviour
                 frame_open = false;
                 notes_played++;
                 
+                stopsources[6] = false;
+                asources[6].Play();
             }
 
             if(Input.GetKeyUp(KeyCode.Alpha1))
             {
-                stop = true;
+                stopsources[0] = true;
+            }
+            if(Input.GetKeyUp(KeyCode.Alpha2))
+            {
+                stopsources[1] = true;
+            }
+            if(Input.GetKeyUp(KeyCode.Alpha3))
+            {
+                stopsources[2] = true;
+            }
+            if(Input.GetKeyUp(KeyCode.Alpha4))
+            {
+                stopsources[3] = true;
+            }
+            if(Input.GetKeyUp(KeyCode.Alpha5))
+            {
+                stopsources[4] = true;
+            }
+            if(Input.GetKeyUp(KeyCode.Alpha6))
+            {
+                stopsources[5] = true;
+            }
+            if(Input.GetKeyUp(KeyCode.Alpha7))
+            {
+                stopsources[6] = true;
             }
 
-            if(stop)
+            for(int i = 0; i < stopsources.Length; i++)
             {
-                audiosource.Stop();
-                stop = false;
+                if(stopsources[i] && asources[i].isPlaying)
+                {
+                    asources[i].Stop();
+                }
             }
 
             int pos = 0;
