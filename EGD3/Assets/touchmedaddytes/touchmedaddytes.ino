@@ -18,6 +18,14 @@ int touch8=0;
 int touch11=0;
 int touch12=0;
 
+int past_touched =0;
+int past_touch4=0;
+int past_touch2=0;
+int past_touch3=0;
+int past_touch8=0;
+int past_touch11=0;
+int past_touch12=0;
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(seven,INPUT);
@@ -40,84 +48,52 @@ void loop() {
     touch11 = digitalRead(eleven);
     touch12 = digitalRead(twelve);
   
-    if(touched){
+    if(touched!= past_touched){
         Serial.write(4);
         Serial.flush();
+        past_touched = touched;
         delay(20);
     }
-    else {
-        Serial.write(0);
-        Serial.flush();
-        delay(20);
-    }
-    if(touch4){
+    else if(touch4 != past_touch4){
         Serial.write(3);
         Serial.flush();
+        past_touch4 = touch4;
         delay(20);
     }
-    else {
-        Serial.write(0);
+    else if(touch2!=past_touch2){
         Serial.flush();
-        delay(20);
-    }
-    if(touch2){
         Serial.write(1);
         Serial.flush();
-        delay(10);
-    }
-    else {
-        Serial.write(0);
-        Serial.flush();
+        past_touch2=touch2;
         delay(20);
     }
-    if(touch3){
+    else if(touch3!=past_touch3){
         Serial.write(2);
         Serial.flush();
+        past_touch3=touch3;
         delay(20);
     }
-    else {
-        Serial.write(0);
-        Serial.flush();
-        delay(20);
-    }
-    if(touch8){
+    else if(touch8!=past_touch8){
         Serial.write(5);
         Serial.flush();
+        past_touch8=touch8;
         delay(20);
     }
-    else {
-        Serial.write(0);
-        Serial.flush();
-        delay(20);
-    }
-    if(touch11){
+    else if(touch11!=past_touch11){
         Serial.write(6);
         Serial.flush();
+        past_touch11=touch11;
         delay(20);
     }
-    else {
-        Serial.write(0);
-        Serial.flush();
-        delay(20);
-    }
-    if(touch12){
+    else if(touch12!=past_touch12){
         Serial.write(7);
         Serial.flush();
+        past_touch12=touch12;
         delay(20);
     }
     else {
-        Serial.write(0);
-        Serial.flush();
-        delay(10);
-    }
-    if(touch12 && touch11 && touch8){
-        Serial.write(8);
-        Serial.flush();
-        delay(20);
-    }
-    else {
-        Serial.write(0);
-        Serial.flush();
-        delay(10);
+      Serial.write(0);
+      Serial.flush();
+      delay(20);
     }
 }

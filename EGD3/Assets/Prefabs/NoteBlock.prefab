@@ -122,4 +122,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ca94a2dae180c34fbd37f1cd6650ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blocktime: 0.5
+  blocktime: 1.5

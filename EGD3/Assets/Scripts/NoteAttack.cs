@@ -28,6 +28,10 @@ public class NoteAttack : MonoBehaviour
     {
         
         counter = 0;
+        if(strength == "jab")
+        {
+            speedcap = .02f;
+        }
     }
 
     // Update is called once per frame
@@ -69,13 +73,13 @@ public class NoteAttack : MonoBehaviour
         }
         if(target == "mid")
         {
-            end.y -= 3f;
+            end.y -= 10f;
             height = 0;
         }
         if(target == "low")
         {
-            end.y -= 14.6f;
-            height = -3;
+            end.y -= 20f;
+            height = -6;
         }
 
         if(aspeed == "power")
@@ -99,18 +103,19 @@ public class NoteAttack : MonoBehaviour
             NoteAttack oa = other.GetComponent<NoteAttack>();
             if(strength == "power")
             {
-                if(oa.strength == "power")
+                if(oa.strength == "power" || oa.strength == "jab")
                 {
                     Destroy(gameObject);
                 }
             }
             else if(strength == "jab")
             {
-                Destroy(gameObject);
+                if (oa.strength == "jab")
+                {
+                    Destroy(gameObject);
+                }
             }
-            print("HIT NOTE");
-            Destroy(other);
-            Destroy(gameObject);
+     
         } 
         if(other.gameObject.tag == "noteblock")
         {
@@ -131,16 +136,25 @@ public class NoteAttack : MonoBehaviour
                 p2.SendMessage("Damage",damage);
                 GameObject[] noteatts = new GameObject[2];
                 noteatts = GameObject.FindGameObjectsWithTag("noteattack");
-                if (noteatts[1])
+                if (noteatts.Length > 1)
                 {
-                    if (noteatts[0] == gameObject)
+
+
+                    if (noteatts[1])
                     {
-                        otheratt = noteatts[1];
+                        if (noteatts[0] == gameObject)
+                        {
+                            otheratt = noteatts[1];
+                        }
+                        else
+                        {
+                            otheratt = noteatts[0];
+                        }
                     }
-                    else
-                    {
-                        otheratt = noteatts[0];
-                    }
+                }
+                else
+                {
+                    otheratt = noteatts[0];
                 }
 
                 if (otheratt != null)
@@ -157,17 +171,25 @@ public class NoteAttack : MonoBehaviour
                 p1.SendMessage("Damage",damage);
                 GameObject[] noteatts = new GameObject[2];
                 noteatts = GameObject.FindGameObjectsWithTag("noteattack");
-                if (noteatts[1])
+                if(noteatts.Length > 1)
                 {
-                    if (noteatts[0] == gameObject)
+                    if (noteatts[1])
                     {
-                        otheratt = noteatts[1];
-                    }
-                    else
-                    {
-                        otheratt = noteatts[0];
+                        if (noteatts[0] == gameObject)
+                        {
+                            otheratt = noteatts[1];
+                        }
+                        else
+                        {
+                            otheratt = noteatts[0];
+                        }
                     }
                 }
+                else
+                {
+                    otheratt = noteatts[0];
+                }
+                
                 if (otheratt != null)
                 {
                     Destroy(otheratt);

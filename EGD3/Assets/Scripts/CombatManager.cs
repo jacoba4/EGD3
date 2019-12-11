@@ -21,6 +21,7 @@ public class CombatManager : MonoBehaviour
     public int jab_damage = 10;
     public int power_damage = 20;
     public int chip_damage = 5;
+    public float waittime = 0.4f;
     P1 p1;
     P2 p2;
     public GameObject p1win;
@@ -315,12 +316,48 @@ public class CombatManager : MonoBehaviour
             startpos = GameObject.FindGameObjectWithTag("p1").transform.position;
             target = p1.HML;
             aspeed = p1.PJB;
+
+            if(target == "high")
+            {
+                Vector3 pos = new Vector3(-35.9f, 19.1f, 21.3f);
+                StartCoroutine("SpawnBlock", pos);
+            }
+
+            if(target == "mid")
+            {
+                Vector3 pos = new Vector3(-35.9f, 10.9f, 22.7f);
+                StartCoroutine("SpawnBlock", pos);
+            }
+
+            if(target == "low")
+            {
+                Vector3 pos = new Vector3(-35.9f, 29f, 25.4f);
+                StartCoroutine("SpawnBlock", pos);
+            }
         }
         if(astartplayer == "p2")
         {
             startpos = GameObject.FindGameObjectWithTag("p2").transform.position;
             target = p2.HML;
             aspeed = p2.PJB;
+
+            if (target == "high")
+            {
+                Vector3 pos = new Vector3(-35.9f, 19.1f, -21.3f);
+                StartCoroutine("SpawnBlock", pos);
+            }
+
+            if (target == "mid")
+            {
+                Vector3 pos = new Vector3(-35.9f, 10.9f, -22.7f);
+                StartCoroutine("SpawnBlock", pos);
+            }
+
+            if (target == "low")
+            {
+                Vector3 pos = new Vector3(-35.9f, 29f, -25.4f);
+                StartCoroutine("SpawnBlock", pos);
+            }
         }
 
         startpos.y-= 3f;
@@ -333,7 +370,7 @@ public class CombatManager : MonoBehaviour
     {
        if(astartplayer == "p1")
         {
-            Vector3 highpos = new Vector3(-35.9f,24.9f,25.4f);
+            Vector3 highpos = new Vector3(-35.9f,29f,25.4f);
             Vector3 midpos = new Vector3(-35.9f, 19.1f, 21.3f);
             Vector3 lowpos = new Vector3(-35.9f, 10.9f, 22.7f);
             Instantiate(noteblock, highpos, Quaternion.identity);
@@ -343,7 +380,7 @@ public class CombatManager : MonoBehaviour
 
        else if(astartplayer == "p2")
         {
-            Vector3 highpos = new Vector3(-35.9f, 24.9f, -25.4f);
+            Vector3 highpos = new Vector3(-35.9f, 29f, -25.4f);
             Vector3 midpos = new Vector3(-35.9f, 19.1f, -21.3f);
             Vector3 lowpos = new Vector3(-35.9f, 10.9f, -22.7f);
             Instantiate(noteblock, highpos, Quaternion.identity);
@@ -365,6 +402,13 @@ public class CombatManager : MonoBehaviour
     private void StartSong()
     {
         GetComponent<AudioSource>().Play();
+    }
+
+    IEnumerator SpawnBlock(Vector3 pos)
+    {
+        yield return new WaitForSeconds(waittime);
+        Instantiate(noteblock, pos, Quaternion.identity);
+
     }
 
 }

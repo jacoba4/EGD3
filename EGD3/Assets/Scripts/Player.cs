@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     public bool frame_open;
     public bool kb;
     Move[] combo;
-    int current_beat = 0;
+    public int current_beat = 0;
     AudioSource[] asources;
     bool[] stopsources;
     public float volume;
@@ -86,53 +86,71 @@ public class Player : MonoBehaviour
         {
             int notes_played = 0;
             int move = -1;
-            bool[] sigs = new bool[7];
+            int pos = 0;
+            bool[] sigs = new bool[8];
 
             try
             {
                 if (signal == 0)
                 {
+                    if (current_beat == 1)
+                    {
+                        pos = 3;
+                    }
+                    else if (current_beat == 2)
+                    {
+                        pos = 0;
+                    }
+                    else if (current_beat == 3)
+                    {
+                        pos = 1;
+                    }
+                    else if (current_beat == 4)
+                    {
+                        pos = 2;
+                    }
+                    combo[pos] = new Move(-1);
                     return;
                 }
                 print(signal);
                 frame_open = false;
-                /*
-                for(int i = 0; i < signal.Length; i++)
-                {
-                    switch(signal[i])
+                
+                    switch(signal)
                     {
-                        case '1':
+                        case 1:
                             sigs[0] = true;
                             break;
 
-                        case '2':
+                        case 2:
                             sigs[1] = true;
                             break;
 
-                        case '3':
+                        case 3:
                             sigs[2] = true;
                             break;
 
-                        case '4':
+                        case 4:
                             sigs[3] = true;
                             break;
 
-                        case '5':
+                        case 5:
                             sigs[4] = true;
                             break;
 
-                        case '6':
+                        case 6:
                             sigs[5] = true;
                             break;
 
-                        case '7':
+                        case 7:
                             sigs[6] = true;
                             break;
+                    case 8:
+                        sigs[7] = true;
+                        break;
                         
                     }
                 }
-                */
-            }
+   
             catch(System.Exception)
             {
                 throw;
@@ -141,13 +159,14 @@ public class Player : MonoBehaviour
 
             if (sigs[0])
             {
-                print("YUH");
+                //print("YUH");
                 move = 1;
                 frame_open = false;
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                //asources[move - 1].Play();
+                asources[move - 1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             else if (sigs[1])
             {
@@ -156,7 +175,8 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                //asources[move - 1].Play();
+                asources[move - 1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             else if (sigs[2])
             {
@@ -165,7 +185,8 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                //asources[move - 1].Play();
+                asources[move - 1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             else if (sigs[3])
             {
@@ -174,7 +195,8 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                //asources[move - 1].Play();
+                asources[move - 1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             else if (sigs[4])
             {
@@ -183,7 +205,8 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                //asources[move - 1].Play();
+                asources[move - 1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             else if (sigs[5])
             {
@@ -193,6 +216,7 @@ public class Player : MonoBehaviour
 
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
            else if (sigs[6])
             {
@@ -202,7 +226,24 @@ public class Player : MonoBehaviour
 
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
+
+            else if(sigs[7])
+            {
+                move = 8;
+                frame_open = false;
+                notes_played++;
+
+                asources[0].Play();
+                asources[2].Play();
+                asources[4].Play();
+                StartCoroutine("StopNote", 0);
+                StartCoroutine("StopNote", 2);
+                StartCoroutine("StopNote", 4);
+            }
+
+            print(notes_played);
 
             for (int i = 0; i < stopsources.Length; i++)
             {
@@ -210,27 +251,11 @@ public class Player : MonoBehaviour
                 {
                     asources[i].Stop();
                 }
-            }*/
-
-            int pos = 0;
-            if (current_beat == 1)
-            {
-                pos = 3;
-            }
-            if (current_beat == 2)
-            {
-                pos = 0;
-            }
-            if (current_beat == 3)
-            {
-                pos = 1;
-            }
-            if (current_beat == 4)
-            {
-                pos = 2;
             }
 
-            int pos = 0;
+      
+
+            pos = 0;
             if (current_beat == 1)
             {
                 pos = 3;
@@ -247,7 +272,7 @@ public class Player : MonoBehaviour
             {
                 pos = 2;
             }
-            /*
+            
             if (notes_played > 0)
             {
 
@@ -256,10 +281,10 @@ public class Player : MonoBehaviour
                     combo[pos] = new Move(8);
                 }
                 else
-                {
+                { 
                     combo[pos] = new Move(move);
                 }
-            }*/
+            }
             else
             {
                 combo[pos] = new Move(-1);
@@ -414,6 +439,7 @@ public class Player : MonoBehaviour
             }
             else
             {
+                print("ree");
                 combo[pos] = new Move(-1);
             }
         }
@@ -461,17 +487,23 @@ public class Player : MonoBehaviour
         string HML = "";
         string PJB = "";
         bool nul = false;
-        for(int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            if(combo[i] == null)
+            if (combo[i] == null)
             {
                 nul = true;
             }
         }
-        if(nul)
+        if (nul)
         {
             return;
         }
+
+        for (int i = 0; i < 4; i++)
+        {
+            print(combo[i].getNote() + "\n");
+        }
+
 
         if(combo[0].IsRest() && !combo[1].IsRest() && combo[2].IsRest() && !combo[3].IsRest())
         {
@@ -548,14 +580,15 @@ public class Player : MonoBehaviour
         {
             if(gameObject.tag == "p1")
             {
-                combat_manager_script.P1Lose();
+                //combat_manager_script.P1Lose();
             }
             else if(gameObject.tag == "p2")
             {
-                combat_manager_script.P2Lose();
+                //combat_manager_script.P2Lose();
             }
 
             GameObject.FindGameObjectWithTag("metronome").GetComponent<BetterMetronome>().StopMetronome();
+            StartCoroutine("StopGame");
         }
     }
 
