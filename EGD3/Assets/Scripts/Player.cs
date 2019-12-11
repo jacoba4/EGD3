@@ -211,6 +211,7 @@ public class Player : MonoBehaviour
                 stopsources[6] = true;
             }
 
+            
             for(int i = 0; i < stopsources.Length; i++)
             {
                 if(stopsources[i] && asources[i].isPlaying)
