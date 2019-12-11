@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     int player_number;
     // Start is called before the first frame update
     public bool frame_open;
+    public bool kb;
     Move[] combo;
     int current_beat = 0;
     AudioSource[] asources;
@@ -28,10 +29,7 @@ public class Player : MonoBehaviour
             asources[i].volume = volume;
         }
         stopsources = new bool[7];
-        if (gameObject.name.Equals("GameObject (1)"))
-        {
-            sp = new SerialPort("COM6", 9600);
-        }
+        
 
 
         combo = new Move[4];
@@ -50,9 +48,14 @@ public class Player : MonoBehaviour
             player_number = 1;
         }
 
-        if(gameObject.tag == "p2")
+        if (gameObject.tag == "p2")
         {
             player_number = 2;
+        }
+
+        if (player_number == 2)
+        {
+            sp = new SerialPort("COM6", 9600);
         }
 
         sp.Open();
@@ -62,62 +65,178 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (frame_open)
+        if (frame_open && sp.IsOpen)
         {
-            if(sp.IsOpen)
-            {
-                int signal=sp.ReadByte();
+            int notes_played = 0;
+            int move = -1;
+            string signal = "";
+            bool[] sigs = new bool[7];
 
-                if (signal==1)
+            try
+            {
+                sp.ReadTimeout = 1;
+                signal = sp.ReadLine();
+                print(signal);
+                
+                for(int i = 0; i < signal.Length; i++)
                 {
-                    print(signal);
-                    combo[current_beat] = new Move(1);
-                    frame_open = false;
+                    switch(signal[i])
+                    {
+                        case '1':
+                            sigs[0] = true;
+                            break;
+
+                        case '2':
+                            sigs[1] = true;
+                            break;
+
+                        case '3':
+                            sigs[2] = true;
+                            break;
+
+                        case '4':
+                            sigs[3] = true;
+                            break;
+
+                        case '5':
+                            sigs[4] = true;
+                            break;
+
+                        case '6':
+                            sigs[5] = true;
+                            break;
+
+                        case '7':
+                            sigs[6] = true;
+                            break;
+                        
+                    }
                 }
-                if (signal == 2)
-                {
-                    print(signal);
-                    combo[current_beat] = new Move(2);
-                    frame_open = false;
-                }
-                if (signal == 3)
-                {
-                    print(signal);
-                    combo[current_beat] = new Move(3);
-                    frame_open = false;
-                }
-                if (signal == 4)
-                {
-                    print(signal);
-                    combo[current_beat] = new Move(4);
-                    frame_open = false;
-                }
-                if (signal == 5)
-                {
-                    print(signal);
-                    combo[current_beat] = new Move(5);
-                    frame_open = false;
-                }
-                if (signal == 6)
-                {
-                    print(signal);
-                    combo[current_beat] = new Move(6);
-                    frame_open = false;
-                }
-                if (signal == 7)
-                {
-                    print(signal);
-                    combo[current_beat] = new Move(7);
-                    frame_open = false;
-                }
-                return;
+            }
+            catch
+            {
+
             }
 
 
+
+
+            if (sigs[0])
+            {
+                print("YUH");
+                move = 1;
+                frame_open = false;
+                notes_played++;
+
+                stopsources[move - 1] = false;
+                asources[move - 1].Play();
+            }
+            if (sigs[1])
+            {
+                move = 2;
+                frame_open = false;
+                notes_played++;
+
+                stopsources[move - 1] = false;
+                asources[move - 1].Play();
+            }
+            if (sigs[2])
+            {
+                move = 3;
+                frame_open = false;
+                notes_played++;
+
+                stopsources[move - 1] = false;
+                asources[move - 1].Play();
+            }
+            if (sigs[3])
+            {
+                move = 4;
+                frame_open = false;
+                notes_played++;
+
+                stopsources[move - 1] = false;
+                asources[move - 1].Play();
+            }
+            if (sigs[4])
+            {
+                move = 5;
+                frame_open = false;
+                notes_played++;
+
+                stopsources[move - 1] = false;
+                asources[move - 1].Play();
+            }
+            if (sigs[5])
+            {
+                move = 6;
+                frame_open = false;
+                notes_played++;
+
+                stopsources[move - 1] = false;
+                asources[move - 1].Play();
+            }
+            if (sigs[6])
+            {
+                move = 7;
+                frame_open = false;
+                notes_played++;
+
+                stopsources[move - 1] = false;
+                asources[move - 1].Play();
+            }
+            for (int i = 0; i < stopsources.Length; i++)
+            {
+                if (stopsources[i] && asources[i].isPlaying)
+                {
+                    asources[i].Stop();
+                }
+            }
+
+            int pos = 0;
+            if (current_beat == 1)
+            {
+                pos = 3;
+            }
+            if (current_beat == 2)
+            {
+                pos = 0;
+            }
+            if (current_beat == 3)
+            {
+                pos = 1;
+            }
+            if (current_beat == 4)
+            {
+                pos = 2;
+            }
+
+            if (notes_played > 0)
+            {
+
+                if (notes_played > 1)
+                {
+                    combo[pos] = new Move(8);
+                }
+                else
+                {
+                    combo[pos] = new Move(move);
+                }
+            }
+            else
+            {
+                combo[pos] = new Move(-1);
+            }
+        }
+
+
+        if (frame_open && kb)
+        {
+            //If using keyboard
             int notes_played = 0;
             int move = -1;
-            //If using keyboard
-            if(Input.GetKeyDown(KeyCode.Alpha1))
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 move = 1;
                 frame_open = false;
@@ -127,7 +246,7 @@ public class Player : MonoBehaviour
                 asources[0].Play();
                 print("play");
             }
-            if(Input.GetKeyDown(KeyCode.Alpha2))
+            if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 move = 2;
                 frame_open = false;
@@ -136,130 +255,126 @@ public class Player : MonoBehaviour
                 stopsources[1] = false;
                 asources[1].Play();
             }
-            if(Input.GetKeyDown(KeyCode.Alpha3))
+            if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 move = 3;
                 frame_open = false;
                 notes_played++;
-                
+
                 stopsources[2] = false;
                 asources[2].Play();
             }
-            if(Input.GetKeyDown(KeyCode.Alpha4))
+            if (Input.GetKeyDown(KeyCode.Alpha4))
             {
                 move = 4;
                 frame_open = false;
                 notes_played++;
-                
+
                 stopsources[3] = false;
                 asources[3].Play();
             }
-            if(Input.GetKeyDown(KeyCode.Alpha5))
+            if (Input.GetKeyDown(KeyCode.Alpha5))
             {
                 move = 5;
                 frame_open = false;
                 notes_played++;
-                
+
                 stopsources[4] = false;
                 asources[4].Play();
             }
-            if(Input.GetKeyDown(KeyCode.Alpha6))
+            if (Input.GetKeyDown(KeyCode.Alpha6))
             {
                 move = 6;
                 frame_open = false;
                 notes_played++;
-                
+
                 stopsources[5] = false;
                 asources[5].Play();
             }
-            if(Input.GetKeyDown(KeyCode.Alpha7))
+            if (Input.GetKeyDown(KeyCode.Alpha7))
             {
                 move = 7;
                 frame_open = false;
                 notes_played++;
-                
+
                 stopsources[6] = false;
                 asources[6].Play();
             }
 
-            if(Input.GetKeyUp(KeyCode.Alpha1))
+            if (Input.GetKeyUp(KeyCode.Alpha1))
             {
                 stopsources[0] = true;
             }
-            if(Input.GetKeyUp(KeyCode.Alpha2))
+            if (Input.GetKeyUp(KeyCode.Alpha2))
             {
                 stopsources[1] = true;
             }
-            if(Input.GetKeyUp(KeyCode.Alpha3))
+            if (Input.GetKeyUp(KeyCode.Alpha3))
             {
                 stopsources[2] = true;
             }
-            if(Input.GetKeyUp(KeyCode.Alpha4))
+            if (Input.GetKeyUp(KeyCode.Alpha4))
             {
                 stopsources[3] = true;
             }
-            if(Input.GetKeyUp(KeyCode.Alpha5))
+            if (Input.GetKeyUp(KeyCode.Alpha5))
             {
                 stopsources[4] = true;
             }
-            if(Input.GetKeyUp(KeyCode.Alpha6))
+            if (Input.GetKeyUp(KeyCode.Alpha6))
             {
                 stopsources[5] = true;
             }
-            if(Input.GetKeyUp(KeyCode.Alpha7))
+            if (Input.GetKeyUp(KeyCode.Alpha7))
             {
                 stopsources[6] = true;
             }
 
-            
-            for(int i = 0; i < stopsources.Length; i++)
+
+            for (int i = 0; i < stopsources.Length; i++)
             {
-                if(stopsources[i] && asources[i].isPlaying)
+                if (stopsources[i] && asources[i].isPlaying)
                 {
                     asources[i].Stop();
                 }
             }
 
             int pos = 0;
-                    if(current_beat == 1)
-                    {
-                        pos = 3;
-                    }
-                    if(current_beat == 2)
-                    {
-                        pos = 0;
-                    }
-                    if(current_beat == 3)
-                    {
-                        pos = 1;
-                    }
-                    if(current_beat == 4)
-                    {
-                        pos = 2;
-                    }
-
-            if(notes_played > 0)
+            if (current_beat == 1)
             {
-                
-                if(notes_played >1)
+                pos = 3;
+            }
+            if (current_beat == 2)
+            {
+                pos = 0;
+            }
+            if (current_beat == 3)
+            {
+                pos = 1;
+            }
+            if (current_beat == 4)
+            {
+                pos = 2;
+            }
+
+            if (notes_played > 0)
+            {
+
+                if (notes_played > 1)
                 {
                     combo[pos] = new Move(8);
                 }
                 else
-                {   
+                {
                     combo[pos] = new Move(move);
                 }
             }
             else
             {
-                combo[pos]= new Move(-1);
+                combo[pos] = new Move(-1);
             }
-
-
-            
-            
-            //combo[frametype] = "f";
         }
+            //combo[frametype] = "f";
     }
     public void Beat()
     {

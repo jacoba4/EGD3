@@ -14,6 +14,7 @@ public class BetterMetronome : MonoBehaviour
     public bool visuals = false;
     public bool players = false;
     public bool inputdelay = false;
+    public bool prints = false;
     public GameObject cube;
     public TestController testcontroller;
     public GameObject player1;
@@ -117,19 +118,31 @@ public class BetterMetronome : MonoBehaviour
             {
                 if (CurrentStep == 1)
                 {
-                    print(CurrentMeasure.ToString());
+                    if(prints)
+                    {
+                        print(CurrentMeasure.ToString());
+                    }
                 }
                 else if (CurrentStep == 2)
                 {
-                    print("e");
+                    if(prints)
+                    {
+                        print("e");
+                    }  
                 }
                 else if (CurrentStep == 3)
                 {
-                    print("and");
+                    if(prints)
+                    {
+                        print("and");
+                    }
                 }
                 else if (CurrentStep == 4)
                 {
-                    print("a");
+                    if(prints)
+                    {
+                        print("a");
+                    }
                 }
             }
 
