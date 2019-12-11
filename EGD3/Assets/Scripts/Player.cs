@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
+using System.Threading;
 
 public class Player : MonoBehaviour
 {
@@ -19,6 +20,16 @@ public class Player : MonoBehaviour
     bool[] stopsources;
     public float volume;
     SerialPort sp = new SerialPort("COM5", 9600);
+    int signal;
+
+    public void ReadArudino()
+    {
+        while (sp.IsOpen)
+        {
+            signal = sp.ReadByte();
+        }
+    }
+
 
     void Start()
     {
@@ -59,7 +70,11 @@ public class Player : MonoBehaviour
         }
 
         sp.Open();
-        sp.ReadTimeout = 40;
+        sp.ReadTimeout = 100;
+        Thread readInput = new Thread(new ThreadStart(ReadArudino));
+        readInput.IsBackground = true;
+        readInput.Start();
+        
     }
 
     // Update is called once per frame
@@ -69,15 +84,17 @@ public class Player : MonoBehaviour
         {
             int notes_played = 0;
             int move = -1;
-            string signal = "";
             bool[] sigs = new bool[7];
 
             try
             {
-                sp.ReadTimeout = 1;
-                signal = sp.ReadLine();
+                if (signal == 0)
+                {
+                    return;
+                }
                 print(signal);
-                
+                frame_open = false;
+                /*
                 for(int i = 0; i < signal.Length; i++)
                 {
                     switch(signal[i])
@@ -112,13 +129,12 @@ public class Player : MonoBehaviour
                         
                     }
                 }
+                */
             }
-            catch
+            catch(System.Exception)
             {
-
+                throw;
             }
-
-
 
 
             if (sigs[0])
@@ -131,7 +147,7 @@ public class Player : MonoBehaviour
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
             }
-            if (sigs[1])
+            else if (sigs[1])
             {
                 move = 2;
                 frame_open = false;
@@ -140,7 +156,7 @@ public class Player : MonoBehaviour
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
             }
-            if (sigs[2])
+            else if (sigs[2])
             {
                 move = 3;
                 frame_open = false;
@@ -149,7 +165,7 @@ public class Player : MonoBehaviour
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
             }
-            if (sigs[3])
+            else if (sigs[3])
             {
                 move = 4;
                 frame_open = false;
@@ -158,7 +174,7 @@ public class Player : MonoBehaviour
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
             }
-            if (sigs[4])
+            else if (sigs[4])
             {
                 move = 5;
                 frame_open = false;
@@ -167,7 +183,7 @@ public class Player : MonoBehaviour
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
             }
-            if (sigs[5])
+            else if (sigs[5])
             {
                 move = 6;
                 frame_open = false;
@@ -176,7 +192,7 @@ public class Player : MonoBehaviour
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
             }
-            if (sigs[6])
+           else if (sigs[6])
             {
                 move = 7;
                 frame_open = false;
@@ -185,6 +201,7 @@ public class Player : MonoBehaviour
                 stopsources[move - 1] = false;
                 asources[move - 1].Play();
             }
+
             for (int i = 0; i < stopsources.Length; i++)
             {
                 if (stopsources[i] && asources[i].isPlaying)
@@ -198,15 +215,15 @@ public class Player : MonoBehaviour
             {
                 pos = 3;
             }
-            if (current_beat == 2)
+            else if (current_beat == 2)
             {
                 pos = 0;
             }
-            if (current_beat == 3)
+            else if (current_beat == 3)
             {
                 pos = 1;
             }
-            if (current_beat == 4)
+            else if (current_beat == 4)
             {
                 pos = 2;
             }
@@ -230,7 +247,7 @@ public class Player : MonoBehaviour
         }
 
 
-        if (frame_open && kb)
+        else if (frame_open && kb)
         {
             //If using keyboard
             int notes_played = 0;
@@ -376,6 +393,10 @@ public class Player : MonoBehaviour
         }
             //combo[frametype] = "f";
     }
+
+
+
+
     public void Beat()
     {
         //Vector3 spawnpos = new Vector3(pos,0,0);
@@ -383,6 +404,8 @@ public class Player : MonoBehaviour
         //pos
         //frame_open = false;
     }
+
+
 
     public void StartFrame(int beat)
     {
