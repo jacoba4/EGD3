@@ -17,6 +17,6 @@ public class P1HP : MonoBehaviour
     {
         hp = p1.GetComponent<Player>().hp;
         GetComponent<RectTransform>().sizeDelta = new Vector2(hp,100);
-        GetComponent<RectTransform>().anchoredPosition = new Vector3(Mathf.Lerp(-300,-150, (-350 + hp)/100),230,0);
+        GetComponent<RectTransform>().anchoredPosition = new Vector3(Mathf.Lerp(-282,-150, (-350 + hp)/100),221,0);
     }
 }

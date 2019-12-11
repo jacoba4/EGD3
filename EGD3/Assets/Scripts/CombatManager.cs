@@ -27,6 +27,7 @@ public class CombatManager : MonoBehaviour
     public GameObject p2win;
     public bool contest;
     public GameObject noteattack;
+    public GameObject noteblock;
     private void Start()
     {
         p1 = new P1();
@@ -209,7 +210,7 @@ public class CombatManager : MonoBehaviour
         }
         if(p1.PJB == "block")
         {
-            //CREATE BLOCK
+            CreateBlock("p1");
         }
         if(p2.PJB == "power")
         {
@@ -221,7 +222,7 @@ public class CombatManager : MonoBehaviour
         }
         if(p2.PJB == "block")
         {
-            //CREATE BLOCK
+            CreateBlock("p2");
         }
 
         if(p1att != null)
@@ -326,6 +327,29 @@ public class CombatManager : MonoBehaviour
         GameObject temp = Instantiate(noteattack,startpos,Quaternion.identity);
         temp.GetComponent<NoteAttack>().SetPath(astartplayer,adamage,target,aspeed);
         return temp;
+    }
+
+    private void CreateBlock(string astartplayer)
+    {
+       if(astartplayer == "p1")
+        {
+            Vector3 highpos = new Vector3(-35.9f,24.9f,25.4f);
+            Vector3 midpos = new Vector3(-35.9f, 19.1f, 21.3f);
+            Vector3 lowpos = new Vector3(-35.9f, 10.9f, 22.7f);
+            Instantiate(noteblock, highpos, Quaternion.identity);
+            Instantiate(noteblock, midpos, Quaternion.identity);
+            Instantiate(noteblock, lowpos, Quaternion.identity);
+        }
+
+       else if(astartplayer == "p2")
+        {
+            Vector3 highpos = new Vector3(-35.9f, 24.9f, -25.4f);
+            Vector3 midpos = new Vector3(-35.9f, 19.1f, -21.3f);
+            Vector3 lowpos = new Vector3(-35.9f, 10.9f, -22.7f);
+            Instantiate(noteblock, highpos, Quaternion.identity);
+            Instantiate(noteblock, midpos, Quaternion.identity);
+            Instantiate(noteblock, lowpos, Quaternion.identity);
+        }
     }
 
     public void P1Lose()

@@ -39,30 +39,85 @@ void loop() {
     touch8 = digitalRead(eight);
     touch11 = digitalRead(eleven);
     touch12 = digitalRead(twelve);
-
-    String total="0";
+  
     if(touched){
-        total+="4";
+        Serial.write(4);
+        Serial.flush();
+        delay(20);
+    }
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(20);
     }
     if(touch4){
-        total+="3";
+        Serial.write(3);
+        Serial.flush();
+        delay(20);
+    }
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(20);
     }
     if(touch2){
-        total+="1";
+        Serial.write(1);
+        Serial.flush();
+        delay(10);
+    }
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(20);
     }
     if(touch3){
-        total+="2";
+        Serial.write(2);
+        Serial.flush();
+        delay(20);
+    }
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(20);
     }
     if(touch8){
-        total+="5";
+        Serial.write(5);
+        Serial.flush();
+        delay(20);
+    }
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(20);
     }
     if(touch11){
-        total+="6";
+        Serial.write(6);
+        Serial.flush();
+        delay(20);
+    }
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(20);
     }
     if(touch12){
-        total+="7";
+        Serial.write(7);
+        Serial.flush();
+        delay(20);
     }
-    Serial.println(total);
-    Serial.flush();
-    delay(20);
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(10);
+    }
+    if(touch12 && touch11 && touch8){
+        Serial.write(8);
+        Serial.flush();
+        delay(20);
+    }
+    else {
+        Serial.write(0);
+        Serial.flush();
+        delay(10);
+    }
 }

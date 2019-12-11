@@ -12,6 +12,11 @@ TagManager:
   - light
   - beater
   - noteattack
+  - noteblock
+  - 3
+  - 2
+  - 1
+  - fight
   layers:
   - Default
   - TransparentFX

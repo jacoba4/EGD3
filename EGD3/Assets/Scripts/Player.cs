@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
 using System.Threading;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
     AudioSource[] asources;
     bool[] stopsources;
     public float volume;
+    public float notetime = .25f;
     SerialPort sp = new SerialPort("COM5", 9600);
     int signal;
 
@@ -145,7 +147,7 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                asources[move - 1].Play();
+                //asources[move - 1].Play();
             }
             else if (sigs[1])
             {
@@ -154,7 +156,7 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                asources[move - 1].Play();
+                //asources[move - 1].Play();
             }
             else if (sigs[2])
             {
@@ -163,7 +165,7 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                asources[move - 1].Play();
+                //asources[move - 1].Play();
             }
             else if (sigs[3])
             {
@@ -172,7 +174,7 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                asources[move - 1].Play();
+                //asources[move - 1].Play();
             }
             else if (sigs[4])
             {
@@ -181,7 +183,7 @@ public class Player : MonoBehaviour
                 notes_played++;
 
                 stopsources[move - 1] = false;
-                asources[move - 1].Play();
+                //asources[move - 1].Play();
             }
             else if (sigs[5])
             {
@@ -208,6 +210,24 @@ public class Player : MonoBehaviour
                 {
                     asources[i].Stop();
                 }
+            }*/
+
+            int pos = 0;
+            if (current_beat == 1)
+            {
+                pos = 3;
+            }
+            if (current_beat == 2)
+            {
+                pos = 0;
+            }
+            if (current_beat == 3)
+            {
+                pos = 1;
+            }
+            if (current_beat == 4)
+            {
+                pos = 2;
             }
 
             int pos = 0;
@@ -227,7 +247,7 @@ public class Player : MonoBehaviour
             {
                 pos = 2;
             }
-
+            /*
             if (notes_played > 0)
             {
 
@@ -239,7 +259,7 @@ public class Player : MonoBehaviour
                 {
                     combo[pos] = new Move(move);
                 }
-            }
+            }*/
             else
             {
                 combo[pos] = new Move(-1);
@@ -261,7 +281,7 @@ public class Player : MonoBehaviour
 
                 stopsources[0] = false;
                 asources[0].Play();
-                print("play");
+                StartCoroutine("StopNote",move-1);
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
@@ -271,6 +291,7 @@ public class Player : MonoBehaviour
 
                 stopsources[1] = false;
                 asources[1].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
@@ -280,6 +301,7 @@ public class Player : MonoBehaviour
 
                 stopsources[2] = false;
                 asources[2].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             if (Input.GetKeyDown(KeyCode.Alpha4))
             {
@@ -289,6 +311,7 @@ public class Player : MonoBehaviour
 
                 stopsources[3] = false;
                 asources[3].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             if (Input.GetKeyDown(KeyCode.Alpha5))
             {
@@ -298,6 +321,7 @@ public class Player : MonoBehaviour
 
                 stopsources[4] = false;
                 asources[4].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             if (Input.GetKeyDown(KeyCode.Alpha6))
             {
@@ -307,6 +331,7 @@ public class Player : MonoBehaviour
 
                 stopsources[5] = false;
                 asources[5].Play();
+                StartCoroutine("StopNote", move - 1);
             }
             if (Input.GetKeyDown(KeyCode.Alpha7))
             {
@@ -316,6 +341,7 @@ public class Player : MonoBehaviour
 
                 stopsources[6] = false;
                 asources[6].Play();
+                StartCoroutine("StopNote", move - 1);
             }
 
             if (Input.GetKeyUp(KeyCode.Alpha1))
@@ -531,5 +557,17 @@ public class Player : MonoBehaviour
 
             GameObject.FindGameObjectWithTag("metronome").GetComponent<BetterMetronome>().StopMetronome();
         }
+    }
+
+    IEnumerator StopNote(int note)
+    {
+        yield return new WaitForSeconds(notetime);
+        asources[note].Stop();
+    }
+
+    IEnumerator StopGame()
+    {
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("Menu");
     }
 }

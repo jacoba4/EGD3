@@ -19,6 +19,15 @@ public class BetterMetronome : MonoBehaviour
     public TestController testcontroller;
     public GameObject player1;
     public GameObject player2;
+    public GameObject three;
+    public GameObject two;
+    public GameObject one;
+    public GameObject fight;
+    public GameObject num;
+    public GameObject e;
+    public GameObject and;
+    public GameObject a;
+    private GameObject curr_shape;
     ParticleSystem beater;
     GameObject light;
     private Player playerscript1;
@@ -51,9 +60,9 @@ public class BetterMetronome : MonoBehaviour
         var multiplier = Base / 4f;
         var tmpInterval = 60f / BPM;
         interval = tmpInterval / multiplier;
-        nextOpenTime = Time.time + 3;
-        nextTime = Time.time + 3 + (inputwindow / 2); // set the relative time to now
-        nextCloseTime = Time.time + 3 +(inputwindow / 2) + (inputwindow / 2);
+        nextOpenTime = Time.time + 4;
+        nextTime = Time.time + 4 + (inputwindow / 2); // set the relative time to now
+        nextCloseTime = Time.time + 4 +(inputwindow / 2) + (inputwindow / 2);
         StartCoroutine("StartTicks");
     }
     public void Recieve_Arr(string[] arr)
@@ -62,11 +71,23 @@ public class BetterMetronome : MonoBehaviour
     }
     IEnumerator StartTicks()
     {
-        yield return new WaitForSeconds(3);
+        three.SetActive(true);
+        yield return new WaitForSeconds(1);
+        three.SetActive(false);
+        two.SetActive(true);
+        yield return new WaitForSeconds(1);
+        two.SetActive(false);
+        one.SetActive(true);
+        yield return new WaitForSeconds(1);
+        one.SetActive(false);
+        fight.SetActive(true);
+        yield return new WaitForSeconds(1);
+        fight.SetActive(false);
+
         StartCoroutine("PreTick");
         yield return new WaitForSeconds(inputwindow / 2);
         StartCoroutine("DoTick");
-        GameObject.FindGameObjectWithTag("CombatManager").SendMessage("StartSong");
+        //GameObject.FindGameObjectWithTag("CombatManager").SendMessage("StartSong");
         yield return new WaitForSeconds(inputwindow / 2);
         StartCoroutine("PostTick");
     }
@@ -116,19 +137,26 @@ public class BetterMetronome : MonoBehaviour
 
             if (players)
             {
+                if(!(CurrentMeasure == 0 && CurrentStep == 1))
+                {
+                    curr_shape.SetActive(false);
+                }
+                
                 if (CurrentStep == 1)
                 {
                     if(prints)
                     {
                         print(CurrentMeasure.ToString());
                     }
+                    curr_shape = num;
                 }
                 else if (CurrentStep == 2)
                 {
                     if(prints)
                     {
                         print("e");
-                    }  
+                    }
+                    curr_shape = e;
                 }
                 else if (CurrentStep == 3)
                 {
@@ -136,6 +164,7 @@ public class BetterMetronome : MonoBehaviour
                     {
                         print("and");
                     }
+                    curr_shape = and;
                 }
                 else if (CurrentStep == 4)
                 {
@@ -143,7 +172,10 @@ public class BetterMetronome : MonoBehaviour
                     {
                         print("a");
                     }
+                    curr_shape = a;
                 }
+
+                curr_shape.SetActive(true);
             }
 
             nextTime += interval; // add interval to our relative time
