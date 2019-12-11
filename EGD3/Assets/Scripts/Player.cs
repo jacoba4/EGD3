@@ -190,13 +190,17 @@ public class Player : MonoBehaviour
             }
             else if (sigs[3])
             {
-                move = 4;
+                move = 8;
                 frame_open = false;
                 notes_played++;
 
-                stopsources[move - 1] = false;
-                asources[move - 1].Play();
-                StartCoroutine("StopNote", move - 1);
+                //stopsources[move - 1] = false;
+                asources[0].Play();
+                asources[2].Play();
+                asources[4].Play();
+                StartCoroutine("StopNote", 0);
+                StartCoroutine("StopNote", 2);
+                StartCoroutine("StopNote", 4);
             }
             else if (sigs[4])
             {
@@ -243,7 +247,7 @@ public class Player : MonoBehaviour
                 StartCoroutine("StopNote", 4);
             }
 
-            print(notes_played);
+            //print(notes_played);
 
             for (int i = 0; i < stopsources.Length; i++)
             {

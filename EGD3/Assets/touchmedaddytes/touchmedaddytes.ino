@@ -47,7 +47,9 @@ void loop() {
     touch8 = digitalRead(eight);
     touch11 = digitalRead(eleven);
     touch12 = digitalRead(twelve);
-  
+
+
+ 
     if(touched!= past_touched){
         Serial.write(4);
         Serial.flush();
